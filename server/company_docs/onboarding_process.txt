@@ -1,0 +1,25 @@
+NovaTech Solutions — Onboarding Process
+
+NovaTech's onboarding program is designed to get new employees productive, connected, and confident within their first 30 days.
+
+Before Day One
+HR (Rachel Green or Daniel Torres) will send you a welcome email one week before your start date with instructions for equipment setup, system access requests, and required paperwork. A MacBook Pro and any requested peripherals will arrive before your first day.
+
+Week One — Orientation
+All new hires spend their first week at their nearest NovaTech office for in-person onboarding (travel covered by the company for remote employees). The week includes:
+- Day 1: Office tour, IT setup, HR paperwork, and a welcome lunch with your team
+- Day 2–3: Product and engineering overview sessions led by Leila Nasser and Marcus Chen
+- Day 4: Company culture and values session with Sarah O'Brien
+- Day 5: Role-specific deep dives with your manager and team
+
+30-60-90 Day Plan
+Your manager will share a written 30-60-90 day plan before your start date outlining expectations, key deliverables, and success criteria for your first three months. This plan is a starting point for conversation, not a rigid contract.
+
+Onboarding Buddy
+Every new hire is assigned an onboarding buddy — a peer (not your direct manager) who can answer informal questions and help you navigate the company. Buddy assignments are coordinated by Rachel Green.
+
+Tools Access
+You will receive access to Slack, Notion, GitHub (for engineering roles), Linear, and Google Workspace on day one. Additional access requests go through your manager.
+
+Check-In Schedule
+HR will schedule check-in calls at the 2-week, 30-day, and 90-day marks to collect feedback and address any concerns.

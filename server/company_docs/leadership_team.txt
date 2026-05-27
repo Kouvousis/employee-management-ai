@@ -1,0 +1,16 @@
+NovaTech Solutions — Leadership Team
+
+Jane Smith — Chief Executive Officer
+Jane co-founded NovaTech in 2018 after nearly a decade in enterprise software. She sets company strategy, leads investor and board relations, and is the primary voice of NovaTech's culture. Jane holds a BA in Computer Science from UC Berkeley and an MBA from Stanford GSB. She is based in San Francisco.
+
+Marcus Chen — Chief Technology Officer
+Marcus co-founded NovaTech alongside Jane and leads all engineering and technical strategy. He oversees the Engineering and Data & AI teams and is responsible for architecture decisions across the platform. Marcus has a background in distributed systems and previously led platform engineering at a Series C startup. He is based in San Francisco.
+
+Sarah O'Brien — VP of People
+Sarah joined NovaTech in January 2019 and built the People function from the ground up. She owns recruiting, onboarding, performance management, compensation, and company culture. Sarah previously led HR at two fast-growing startups and holds a degree in Organizational Psychology from Boston University. She is based in San Francisco.
+
+David Park — Chief Financial Officer
+David joined in July 2019 and manages NovaTech's financial operations, including budgeting, payroll, vendor contracts, and audit preparation. He has a background in finance at both startups and mid-sized tech companies. David is based in the San Francisco office.
+
+Leila Nasser — VP of Product
+Leila joined in February 2020 and leads the Product team, setting product vision and roadmap priorities across all NovaTech offerings. She works closely with Engineering, Sales, and customers to ensure the product delivers measurable value. Leila holds an MS in Human-Computer Interaction from Carnegie Mellon and is based in Austin.

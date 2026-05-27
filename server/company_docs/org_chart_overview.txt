@@ -1,0 +1,37 @@
+NovaTech Solutions — Organizational Structure
+
+NovaTech is organized into five departments, each reporting to a member of the leadership team.
+
+Leadership (reports to Board)
+- Jane Smith, CEO
+- Marcus Chen, CTO
+- Sarah O'Brien, VP of People
+- David Park, CFO
+- Leila Nasser, VP of Product
+
+Engineering (reports to Marcus Chen, CTO)
+Lead: Carlos Ruiz, Engineering Lead
+Team: Priya Patel, Tom Brennan, Aisha Johnson, Luca Ferrari, Nina Kovacs, James Wu, Maya Thompson
+
+Product (reports to Leila Nasser, VP of Product)
+Senior PM: Sofia Reyes
+PM: Ben Hartley
+Designers: Zoe Kim (UX), Alex Morgan (UI)
+
+HR (reports to Sarah O'Brien, VP of People)
+HR Manager: Rachel Green
+Recruiter: Daniel Torres
+
+Sales (reports to Jane Smith, CEO)
+Lead: Ryan Mitchell
+Account Executives: Emma Clarke, Omar Hassan
+SDR: Lisa Park
+
+Data & AI (reports to Marcus Chen, CTO)
+Data Scientist: Kevin Zhao
+ML Engineer: Fatima Al-Rashid
+
+Cross-Team Collaboration
+Engineering and Product work in two-week sprints aligned to quarterly OKRs. Sales and Product hold a bi-weekly sync to communicate customer needs. HR partners with all department leads on headcount planning each quarter.
+
+Headcount decisions above senior individual contributor level require approval from the relevant VP and sign-off from David Park (CFO). New roles are posted internally before being opened externally.
