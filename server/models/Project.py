@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 class Status(str, Enum):
-    todo = "todo"
+    planning = "planning"
     in_progress = "in_progress"
     completed = "completed"
 
