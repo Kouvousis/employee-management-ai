@@ -1,5 +1,5 @@
 from datetime import date
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional
 from sqlmodel import Field, SQLModel, Relationship
 
 if TYPE_CHECKING:
@@ -15,5 +15,5 @@ class Employee(SQLModel, table=True):
     department: str
     hire_date: date
     role: str
-    tasks: list["Task"] = Relationship(back_populates="employee")
-    user: User | None = Relationship(back_populates="employee")
+    tasks: List["Task"] = Relationship(back_populates="employee")
+    user: Optional["User"] = Relationship(back_populates="employee")

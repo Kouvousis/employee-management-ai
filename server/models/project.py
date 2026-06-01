@@ -1,13 +1,13 @@
 from datetime import date
 from enum import Enum
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from sqlmodel import Field, SQLModel, Relationship
 
 if TYPE_CHECKING:
     from .task import Task
 
 
-class Status(str, Enum):
+class ProjectStatus(str, Enum):
     planning = "planning"
     in_progress = "in_progress"
     completed = "completed"
@@ -18,5 +18,5 @@ class Project(SQLModel, table=True):
     name: str
     description: str
     deadline: date
-    status: Status = Field(default=Status.in_progress)
-    tasks: list["Task"] = Relationship(back_populates="project")
+    status: ProjectStatus = Field(default=ProjectStatus.in_progress)
+    tasks: List["Task"] = Relationship(back_populates="project")
