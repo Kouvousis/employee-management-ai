@@ -96,48 +96,53 @@ def seed(session: Session) -> None:
         print("Database already seeded, skipping.")
         return
 
-    employees: dict[str, Employee] = {}
-    default_password = hash_password("novatech123")
+    try:
+        employees: dict[str, Employee] = {}
+        default_password = hash_password("novatech123")
 
-    for data in EMPLOYEES:
-        emp = Employee(**data)
-        session.add(emp)
-        session.flush()
+        for data in EMPLOYEES:
+            emp = Employee(**data)
+            session.add(emp)
+            session.flush()
 
+            session.add(User(
+                hashed_password=default_password,
+                access_rights=_access_rights(data["department"]),
+                employee_id=emp.id,
+            ))
+
+            full_name = f"{data['first_name']} {data['last_name']}"
+            employees[full_name] = emp
+
+        # Standalone admin account
         session.add(User(
-            hashed_password=default_password,
-            access_rights=_access_rights(data["department"]),
-            employee_id=emp.id,
+            hashed_password=hash_password("admin123"),
+            access_rights=AccessRights.admin,
         ))
 
-        full_name = f"{data['first_name']} {data['last_name']}"
-        employees[full_name] = emp
+        # Projects
+        projects: dict[str, Project] = {}
+        for data in PROJECTS:
+            proj = Project(**data)
+            session.add(proj)
+            session.flush()
+            projects[data["name"]] = proj
 
-    # Standalone admin account
-    session.add(User(
-        hashed_password=hash_password("admin123"),
-        access_rights=AccessRights.admin,
-    ))
+        # Tasks
+        for emp_name, title, status, proj_name in TASKS:
+            session.add(Task(
+                title=title,
+                status=status,
+                employee_id=employees[emp_name].id,
+                project_id=projects[proj_name].id,
+            ))
 
-    # Projects
-    projects: dict[str, Project] = {}
-    for data in PROJECTS:
-        proj = Project(**data)
-        session.add(proj)
-        session.flush()
-        projects[data["name"]] = proj
-
-    # Tasks
-    for emp_name, title, status, proj_name in TASKS:
-        session.add(Task(
-            title=title,
-            status=status,
-            employee_id=employees[emp_name].id,
-            project_id=projects[proj_name].id,
-        ))
-
-    session.commit()
-    print(f"Seeded {len(employees)} employees, {len(projects)} projects, {len(TASKS)} tasks.")
+        session.commit()
+        print(f"Seeded {len(employees)} employees, {len(projects)} projects, {len(TASKS)} tasks.")
+    except Exception as e:
+        session.rollback()
+        print(f"Seeding failed and was rolled back: {e}")
+        raise
 
 
 if __name__ == "__main__":
