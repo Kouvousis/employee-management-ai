@@ -7,6 +7,12 @@
 .DS_Store
 Thumbs.db
 
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
 AGENTS.md
 CLAUDE.md
 .claude
