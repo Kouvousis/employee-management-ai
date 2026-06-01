@@ -1,10 +1,12 @@
 from datetime import date
-from passlib.context import CryptContext
+import bcrypt
 from sqlmodel import Session, select
 from database import engine
 from models import Employee, Project, Task, User, AccessRights
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 EMPLOYEES = [
     # Leadership
@@ -95,26 +97,25 @@ def seed(session: Session) -> None:
         return
 
     employees: dict[str, Employee] = {}
-    default_password = pwd_context.hash("novatech123")
+    default_password = hash_password("novatech123")
 
     for data in EMPLOYEES:
         emp = Employee(**data)
         session.add(emp)
         session.flush()
 
-        user = User(
+        session.add(User(
             hashed_password=default_password,
             access_rights=_access_rights(data["department"]),
             employee_id=emp.id,
-        )
-        session.add(user)
+        ))
 
         full_name = f"{data['first_name']} {data['last_name']}"
         employees[full_name] = emp
 
     # Standalone admin account
     session.add(User(
-        hashed_password=pwd_context.hash("admin123"),
+        hashed_password=hash_password("admin123"),
         access_rights=AccessRights.admin,
     ))
 
