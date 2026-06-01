@@ -8,12 +8,16 @@ if TYPE_CHECKING:
 
 
 class ProjectStatus(str, Enum):
+    """Lifecycle stage of a project. Named ProjectStatus (not Status) to avoid a PostgreSQL enum type collision with TaskStatus."""
+
     planning = "planning"
     in_progress = "in_progress"
     completed = "completed"
 
 
 class Project(SQLModel, table=True):
+    """A company initiative that groups one or more Tasks."""
+
     id: int | None = Field(default=None, primary_key=True)
     name: str
     description: str

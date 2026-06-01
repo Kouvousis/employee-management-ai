@@ -14,7 +14,9 @@ engine = create_engine(
     echo=os.getenv("DEVELOPMENT_MODE", "false").lower() == "true",
 )
 
+
 def create_db_and_tables():
+    """Create all tables defined in SQLModel metadata. Safe to call on every startup — skips tables that already exist."""
     try:
         SQLModel.metadata.create_all(engine)
     except Exception as e:
@@ -23,6 +25,8 @@ def create_db_and_tables():
 
 
 def get_session():
+    """FastAPI dependency that yields a per-request Session.
+    Rolls back automatically on any SQLAlchemy error so the connection is never left in a broken state."""
     with Session(engine) as session:
         try:
             yield session

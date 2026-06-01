@@ -8,6 +8,9 @@ if TYPE_CHECKING:
 
 
 class Employee(SQLModel, table=True):
+    """HR record for a NovaTech employee. Auth concerns (password, access rights) live in User;
+    this model holds identity and organizational data only."""
+
     id: int | None = Field(default=None, primary_key=True)
     first_name: str
     last_name: str

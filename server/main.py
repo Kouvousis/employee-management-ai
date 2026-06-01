@@ -5,13 +5,18 @@ from sqlmodel import Session
 from database import create_db_and_tables, engine
 from seed import seed
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Startup: create tables then seed reference data. Code after yield runs on shutdown.
+        In a production app seeding should be manually done instead of on every startup.
+    """
     create_db_and_tables()
     with Session(engine) as session:
         seed(session)
     yield
     print("Exiting application")
+
 
 app = FastAPI(title="NovaTech Solutions", lifespan=lifespan)
 
