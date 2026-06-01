@@ -1,4 +1,4 @@
-from .Employee import Employee
-from .Project import Project
-from .Task import Task
-from .User import User, AccessRights
+from .employee import Employee
+from .project import Project
+from .task import Task
+from .user import User, AccessRights

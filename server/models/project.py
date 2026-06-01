@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 
 if TYPE_CHECKING:
-    from .Task import Task
+    from .task import Task
 
 
 class Status(str, Enum):

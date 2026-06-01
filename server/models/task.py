@@ -1,7 +1,7 @@
 from enum import Enum
 from sqlmodel import Field, SQLModel, Relationship
-from .Employee import Employee
-from .Project import Project
+from .employee import Employee
+from .project import Project
 
 
 class Status(str, Enum):

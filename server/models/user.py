@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 
 if TYPE_CHECKING:
-    from .Employee import Employee
+    from .employee import Employee
 
 
 class AccessRights(str, Enum):

@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 
 if TYPE_CHECKING:
-    from .Task import Task
-    from .User import User
+    from .task import Task
+    from .user import User
 
 
 class Employee(SQLModel, table=True):
