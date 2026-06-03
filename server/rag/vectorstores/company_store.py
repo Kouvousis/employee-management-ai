@@ -55,12 +55,3 @@ def get_company_store() -> PGVector:
 
     store.add_documents(chunks)
     return store
-
-
-if __name__ == "__main__":
-    store = get_company_store()
-    results = store.similarity_search("what is the PTO policy?", k=2)
-    for doc in results:
-        print(doc.metadata["source"])
-        print(doc.page_content[:200])
-        print("---")
