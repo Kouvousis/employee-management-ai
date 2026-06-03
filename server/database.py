@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session, SQLModel, create_engine
 
@@ -18,6 +19,9 @@ engine = create_engine(
 def create_db_and_tables():
     """Create all tables defined in SQLModel metadata. Safe to call on every startup — skips tables that already exist."""
     try:
+        with engine.connect() as conn:
+            conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+            conn.commit()
         SQLModel.metadata.create_all(engine)
     except Exception as e:
         print(f"Error creating database and tables: {e}")
