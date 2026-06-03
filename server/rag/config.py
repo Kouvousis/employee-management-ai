@@ -1,5 +1,8 @@
 import os
+from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
+
+load_dotenv()
 
 OPENAI_KEY = os.getenv("OPENAI_API_KEY")
 ANTHROPIC_KEY = os.getenv("ANTHROPIC_API_KEY")
