@@ -15,6 +15,7 @@ CONNECTION_STRING = os.getenv("DATABASE_URL", "")
 
 
 def _is_indexed() -> bool:
+    """Return True if the company_knowledge collection already has embeddings."""
     engine = create_engine(CONNECTION_STRING)
     with engine.connect() as conn:
         try:
@@ -33,6 +34,7 @@ def _is_indexed() -> bool:
 
 
 def get_company_store() -> PGVector:
+    """Return the PGVector store, indexing company docs on first call."""
     store = PGVector(
         embeddings=EMBEDDINGS,
         collection_name=COLLECTION_NAME,
