@@ -14,12 +14,14 @@ if not SECRET_KEY:
 
 
 def create_access_token(username: str) -> str:
+    """Sign and return a JWT with the given username as the subject claim."""
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {"sub": username, "exp": expire}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
 def decode_access_token(token: str) -> dict | None:
+    """Verify and decode a JWT. Returns the payload dict or None if invalid or expired."""
     try:
         return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     except JWTError as e:
