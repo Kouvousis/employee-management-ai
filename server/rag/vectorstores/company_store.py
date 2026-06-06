@@ -52,6 +52,10 @@ def get_company_store() -> PGVector:
     )
     docs = loader.load()
 
+    for doc in docs:
+        stem = Path(doc.metadata["source"]).stem
+        doc.metadata["topic"] = stem.replace("_", " ").title()
+
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
     chunks = splitter.split_documents(docs)
 
