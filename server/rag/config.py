@@ -20,5 +20,6 @@ elif ANTHROPIC_KEY:
     from langchain_anthropic import ChatAnthropic
 
     LLM = ChatAnthropic(model_name="claude-haiku-4-5-20251001", temperature=0, timeout=30, max_retries=3)
-else:
+
+if not OPENAI_KEY and not ANTHROPIC_KEY:
     raise ValueError("No LLM API key found — set OPENAI_API_KEY or ANTHROPIC_API_KEY in .env")
