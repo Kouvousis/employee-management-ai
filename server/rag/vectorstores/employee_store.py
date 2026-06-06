@@ -1,8 +1,8 @@
-import os
+﻿import os
 from dotenv import load_dotenv
 from langchain_core.documents import Document
 from langchain_postgres import PGVector
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from sqlalchemy.orm import selectinload
 from sqlmodel import Session, select
 from models import Employee
@@ -14,11 +14,13 @@ load_dotenv()
 COLLECTION_NAME = "employee_data"
 CONNECTION_STRING = os.getenv("DATABASE_URL", "")
 
+if not CONNECTION_STRING:
+    raise ValueError("DATABASE_URL is not set — add it to your .env file")
+
 
 def _is_indexed() -> bool:
     """Return True if the employee_data collection already has embeddings."""
-    check_engine = create_engine(CONNECTION_STRING)
-    with check_engine.connect() as conn:
+    with engine.connect() as conn:
         try:
             result = conn.execute(
                 text(
@@ -73,12 +75,3 @@ def get_employee_store() -> PGVector:
 
     store.add_documents(docs)
     return store
-
-
-if __name__ == "__main__":
-    store = get_employee_store()
-    results = store.similarity_search("software engineer in the engineering department", k=2)
-    for doc in results:
-        print(doc.metadata)
-        print(doc.page_content)
-        print("---")
