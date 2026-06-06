@@ -4,16 +4,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 from database import create_db_and_tables, engine
 from seed import seed
+from rag.vectorstores.company_store import get_company_store
+from rag.vectorstores.employee_store import get_employee_store
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup: create tables then seed reference data. Code after yield runs on shutdown.
-        In a production app seeding should be manually done instead of on every startup.
+    """Startup: create tables, seed reference data, and both vector stores.
+    Code after yield runs on shutdown.
     """
     create_db_and_tables()
     with Session(engine) as session:
         seed(session)
+    get_company_store()
+    get_employee_store()
     yield
     print("Exiting application")
 
