@@ -12,6 +12,7 @@ dependencies = [
     "langchain-community>=0.4.2",
     "langchain-openai>=1.2.2",
     "langchain-postgres>=0.0.17",
+    "langgraph>=1.2.2",
     "pydantic>=2.13.4",
     "python-dotenv>=1.2.2",
     "python-jose>=3.5.0",
