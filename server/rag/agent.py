@@ -11,6 +11,8 @@ from rag.tools.action_tool import (
     create_project_tool,
     assign_employee_to_project_tool,
     add_task_to_project_tool,
+    deactivate_employee_tool,
+    deactivate_project_tool,
 )
 from rag.prompts.hr_prompt import HR_SYSTEM_PROMPT
 
@@ -23,6 +25,8 @@ hr_tools = [
     create_project_tool,
     assign_employee_to_project_tool,
     add_task_to_project_tool,
+    deactivate_employee_tool,
+    deactivate_project_tool,
 ]
 
 memory = MemorySaver()
