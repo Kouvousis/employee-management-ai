@@ -9,6 +9,7 @@ from rag.vectorstores.employee_store import get_employee_store
 from routers.auth import router as auth_router
 from routers.employees import router as employees_router
 from routers.projects import router as projects_router
+from routers.chat import router as chat_router
 
 
 @asynccontextmanager
@@ -30,6 +31,7 @@ app = FastAPI(title="NovaTech Solutions", lifespan=lifespan)
 app.include_router(auth_router)
 app.include_router(employees_router)
 app.include_router(projects_router)
+app.include_router(chat_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,4 +39,5 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Thread-ID"],
 )
