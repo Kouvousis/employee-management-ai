@@ -54,6 +54,3 @@ class EmployeeDelete(BaseModel):
 
 class EmployeeWithTasks(EmployeeRead):
     tasks: list[TaskRead] = []
-
-
-EmployeeWithTasks.model_rebuild()

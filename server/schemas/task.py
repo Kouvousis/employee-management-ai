@@ -53,6 +53,3 @@ class TaskDelete(BaseModel):
 
 class TaskWithEmployee(TaskRead):
     employee: EmployeeRead | None = None
-
-
-TaskWithEmployee.model_rebuild()
