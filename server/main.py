@@ -7,6 +7,7 @@ from seed import seed
 from rag.vectorstores.company_store import get_company_store
 from rag.vectorstores.employee_store import get_employee_store
 from routers.auth import router as auth_router
+from routers.employees import router as employees_router
 
 
 @asynccontextmanager
@@ -26,6 +27,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="NovaTech Solutions", lifespan=lifespan)
 
 app.include_router(auth_router)
+app.include_router(employees_router)
 
 app.add_middleware(
     CORSMiddleware,
