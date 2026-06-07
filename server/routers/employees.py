@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import selectinload
+from sqlalchemy import func
 from sqlmodel import Session, select
 
 from database import get_session
@@ -7,7 +8,7 @@ from models import Employee, Task, User
 from models.user import AccessRights
 from rag.sync import delete_employee_vector, sync_single_employee
 from routers.auth import get_current_user
-from schemas.employee import EmployeeCreate, EmployeeDelete, EmployeeRead, EmployeeUpdate, EmployeeWithTasks
+from schemas.employee import EmployeeCreate, EmployeeDelete, EmployeePage, EmployeeRead, EmployeeUpdate, EmployeeWithTasks
 
 router = APIRouter(prefix="/employees", tags=["employees"])
 
@@ -24,13 +25,22 @@ def require_admin(current_user: User = Depends(get_current_user)) -> User:
     return current_user
 
 
-@router.get("", response_model=list[EmployeeRead])
+@router.get("", response_model=EmployeePage)
 def list_employees(
+    skip: int = 0,
+    limit: int = 50,
     session: Session = Depends(get_session),
     _: User = Depends(require_hr_or_admin),
 ):
-    """Return all active employees. Requires HR or admin access."""
-    return session.exec(select(Employee).where(Employee.is_active == True)).all()
+    """
+    Return a paginated list of active employees. Requires HR or admin access.
+
+    Use `skip` and `limit` to paginate: `?skip=0&limit=50`, `?skip=50&limit=50`, etc.
+    """
+    active = Employee.is_active == True
+    total = session.exec(select(func.count(Employee.id)).where(active)).one()
+    items = session.exec(select(Employee).where(active).offset(skip).limit(limit)).all()
+    return EmployeePage(items=items, total=total, skip=skip, limit=limit)
 
 
 @router.get("/{employee_id}", response_model=EmployeeWithTasks)

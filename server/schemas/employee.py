@@ -55,3 +55,10 @@ class EmployeeDelete(BaseModel):
 
 class EmployeeWithTasks(EmployeeRead):
     tasks: list[TaskRead] = []
+
+
+class EmployeePage(BaseModel):
+    items: list[EmployeeRead]
+    total: int
+    skip: int
+    limit: int
