@@ -19,6 +19,11 @@ def get_current_date() -> str:
     return date.today().isoformat()
 
 
+class _DeactivateInput(BaseModel):
+    id: int = Field(..., description="ID of the record to deactivate")
+    reason: str | None = Field(default=None, description="Optional reason for deactivation")
+
+
 class _AssignEmployeeToProjectInput(BaseModel):
     employee_id: int = Field(..., description="ID of the employee to assign")
     project_id: int = Field(..., description="ID of the project to assign them to")
@@ -163,3 +168,57 @@ def add_task_to_project_tool(title: str, status: TaskStatus = TaskStatus.todo, p
         return msg
     except Exception as e:
         return f"Failed to add task to project: {e}"
+
+
+@tool(args_schema=_DeactivateInput)
+def deactivate_employee_tool(id: int, reason: str | None = None) -> str:
+    """Deactivate an existing employee (soft delete — sets is_active to False).
+    Use this when asked to deactivate, disable, or remove an employee.
+    This does not delete the record — it can be reactivated by an admin.
+    User accounts are not affected by this tool."""
+    try:
+        with Session(engine) as session:
+            employee = session.get(Employee, id)
+            if not employee:
+                return f"Employee with ID {id} not found."
+            if not employee.is_active:
+                return f"{employee.first_name} {employee.last_name} is already inactive."
+
+            employee.is_active = False
+            session.add(employee)
+            session.commit()
+            name = f"{employee.first_name} {employee.last_name}"
+
+        sync_single_employee(id)
+        msg = f"{name} has been deactivated."
+        if reason:
+            msg += f" Reason: {reason}."
+        return msg
+    except Exception as e:
+        return f"Failed to deactivate employee: {e}"
+
+
+@tool(args_schema=_DeactivateInput)
+def deactivate_project_tool(id: int, reason: str | None = None) -> str:
+    """Deactivate an existing project (soft delete — sets is_active to False).
+    Use this when asked to close, deactivate, or archive a project.
+    This does not delete the record — it can be reactivated by an admin."""
+    try:
+        with Session(engine) as session:
+            project = session.get(Project, id)
+            if not project:
+                return f"Project with ID {id} not found."
+            if not project.is_active:
+                return f"Project '{project.name}' is already inactive."
+
+            project.is_active = False
+            session.add(project)
+            session.commit()
+            name = project.name
+
+        msg = f"Project '{name}' has been deactivated."
+        if reason:
+            msg += f" Reason: {reason}."
+        return msg
+    except Exception as e:
+        return f"Failed to deactivate project: {e}"
