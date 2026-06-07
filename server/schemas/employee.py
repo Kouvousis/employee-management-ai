@@ -27,6 +27,7 @@ class EmployeeRead(BaseModel):
     department: str
     hire_date: date
     role: str
+    is_active: bool
 
 
 class EmployeeCreate(BaseModel):
