@@ -8,9 +8,13 @@ Separate from the SQLModel table so that:
   - EmployeeDelete:      confirmation response after deletion
   - EmployeeWithTasks:   EmployeeRead with nested task list for the detail view
 """
+from __future__ import annotations
 from datetime import date
+from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field, EmailStr
-from schemas.task import TaskRead
+
+if TYPE_CHECKING:
+    from schemas.task import TaskRead
 
 
 class EmployeeRead(BaseModel):
@@ -50,6 +54,3 @@ class EmployeeDelete(BaseModel):
 
 class EmployeeWithTasks(EmployeeRead):
     tasks: list[TaskRead] = []
-
-
-EmployeeWithTasks.model_rebuild()
