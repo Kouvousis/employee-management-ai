@@ -9,10 +9,10 @@ Separate from the SQLModel table so that:
   - TaskStatusUpdate:   partial update restricted to status field only
   - TaskDelete:         confirmation response after deletion
 """
+from __future__ import annotations
 from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field
 from models.task import TaskStatus
-from schemas.employee import EmployeeRead
 
 if TYPE_CHECKING:
     from schemas.employee import EmployeeRead
