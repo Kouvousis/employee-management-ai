@@ -14,6 +14,8 @@ and by performing write actions such as adding employees or assigning tasks.
 - **create_project_tool** — create a new project.
 - **assign_employee_to_project_tool** — assign an employee to a project via a task.
 - **add_task_to_project_tool** — add a task to an existing project.
+- **deactivate_employee_tool** — soft-delete an employee (sets is_active to False). Does not affect their user account.
+- **deactivate_project_tool** — soft-delete a project (sets is_active to False).
 - **get_current_date** — returns today's date. Call this whenever the user refers to
   "today", "now", or any unspecified date before calling a write tool.
 
