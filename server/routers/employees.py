@@ -4,50 +4,37 @@ from sqlalchemy import func
 from sqlmodel import Session, select
 
 from database import get_session
-from models import Employee, Task, User
-from models.user import AccessRights
+from models import Employee, Task, User, AccessRights
 from rag.sync import delete_employee_vector, sync_single_employee
-from routers.auth import get_current_user
-from schemas.employee import EmployeeCreate, EmployeeDelete, EmployeePage, EmployeeRead, EmployeeUpdate, EmployeeWithTasks
+from routers.auth import get_current_user, require_admin, require_hr_or_admin
+from schemas.employee import EmployeeCreate, EmployeeDelete, EmployeePage, EmployeeRead, EmployeeUpdate, \
+    EmployeeWithTasks
 
 router = APIRouter(prefix="/employees", tags=["employees"])
 
 
-def require_hr_or_admin(current_user: User = Depends(get_current_user)) -> User:
-    if current_user.access_rights not in (AccessRights.admin, AccessRights.human_resources):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
-    return current_user
-
-
-def require_admin(current_user: User = Depends(get_current_user)) -> User:
-    if current_user.access_rights != AccessRights.admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
-    return current_user
-
-
 @router.get("", response_model=EmployeePage)
 def list_employees(
-    skip: int = 0,
-    limit: int = 50,
-    session: Session = Depends(get_session),
-    _: User = Depends(require_hr_or_admin),
+        skip: int = 0,
+        limit: int = 50,
+        session: Session = Depends(get_session),
+        _: User = Depends(require_hr_or_admin),
 ):
     """
     Return a paginated list of active employees. Requires HR or admin access.
 
     Use `skip` and `limit` to paginate: `?skip=0&limit=50`, `?skip=50&limit=50`, etc.
     """
-    active = Employee.is_active == True
-    total = session.exec(select(func.count(Employee.id)).where(active)).one()
-    items = session.exec(select(Employee).where(active).offset(skip).limit(limit)).all()
+    total = session.exec(select(func.count(Employee.id))).one()
+    items = session.exec(select(Employee).offset(skip).limit(limit)).all()
     return EmployeePage(items=items, total=total, skip=skip, limit=limit)
 
 
 @router.get("/{employee_id}", response_model=EmployeeWithTasks)
 def get_employee(
-    employee_id: int,
-    session: Session = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        employee_id: int,
+        session: Session = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     """
     Return a single employee with their assigned tasks.
@@ -70,9 +57,9 @@ def get_employee(
 
 @router.post("", response_model=EmployeeRead, status_code=status.HTTP_201_CREATED)
 def create_employee(
-    data: EmployeeCreate,
-    session: Session = Depends(get_session),
-    _: User = Depends(require_hr_or_admin),
+        data: EmployeeCreate,
+        session: Session = Depends(get_session),
+        _: User = Depends(require_hr_or_admin),
 ):
     """Create a new employee record. Requires HR or admin access."""
     employee = Employee(**data.model_dump())
@@ -86,10 +73,10 @@ def create_employee(
 
 @router.patch("/{employee_id}", response_model=EmployeeRead)
 def update_employee(
-    employee_id: int,
-    data: EmployeeUpdate,
-    session: Session = Depends(get_session),
-    _: User = Depends(require_hr_or_admin),
+        employee_id: int,
+        data: EmployeeUpdate,
+        session: Session = Depends(get_session),
+        _: User = Depends(require_hr_or_admin),
 ):
     """Update one or more fields on an existing employee. Requires HR or admin access."""
     employee = session.get(Employee, employee_id)
@@ -108,9 +95,9 @@ def update_employee(
 
 @router.post("/{employee_id}/deactivate", response_model=EmployeeRead)
 def deactivate_employee(
-    employee_id: int,
-    session: Session = Depends(get_session),
-    _: User = Depends(require_hr_or_admin),
+        employee_id: int,
+        session: Session = Depends(get_session),
+        _: User = Depends(require_hr_or_admin),
 ):
     """
     Deactivate an employee (soft delete — sets is_active to False).
@@ -134,9 +121,9 @@ def deactivate_employee(
 
 @router.delete("/{employee_id}", response_model=EmployeeDelete)
 def delete_employee(
-    employee_id: int,
-    session: Session = Depends(get_session),
-    _: User = Depends(require_admin),
+        employee_id: int,
+        session: Session = Depends(get_session),
+        _: User = Depends(require_admin),
 ):
     """
     Permanently delete an employee record (hard delete — cannot be undone).
