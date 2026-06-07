@@ -20,3 +20,4 @@ class Employee(SQLModel, table=True):
     role: str
     tasks: List["Task"] = Relationship(back_populates="employee")
     user: Optional["User"] = Relationship(back_populates="employee")
+    is_active: bool = Field(default=True, description="Whether the employee is active and can be modified.")

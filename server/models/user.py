@@ -22,3 +22,4 @@ class User(SQLModel, table=True):
     access_rights: AccessRights = Field(default=AccessRights.employee)
     employee_id: int | None = Field(default=None, foreign_key="employee.id")
     employee: Optional["Employee"] = Relationship(back_populates="user")
+    is_active: bool = Field(default=True, description="Whether the user is allowed to log in.")

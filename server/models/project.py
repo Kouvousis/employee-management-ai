@@ -24,3 +24,5 @@ class Project(SQLModel, table=True):
     deadline: date
     status: ProjectStatus = Field(default=ProjectStatus.in_progress)
     tasks: List["Task"] = Relationship(back_populates="project")
+    is_active: bool = Field(default=True, description="Whether the project is active and can be modified.")
+
