@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
-  selector: 'app-shell',
+  selector: 'app-side-menu',
   imports: [
     RouterOutlet,
     RouterLink,
