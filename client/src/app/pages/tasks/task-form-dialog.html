@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit task' : 'New task' }}</h2>
+
+<form (submit)="$event.preventDefault(); save()">
+  <mat-dialog-content>
+    <div class="flex flex-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput [formField]="taskForm.title" />
+        @if (taskForm.title().touched() && taskForm.title().errors().length) {
+          <mat-error>{{ taskForm.title().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select [formField]="taskForm.status">
+          @for (s of statuses; track s.value) {
+            <mat-option [value]="s.value">{{ s.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Assignee</mat-label>
+        <mat-select [formField]="taskForm.employee_id">
+          <mat-option [value]="null">Unassigned</mat-option>
+          @for (e of employees; track e.id) {
+            <mat-option [value]="e.id">{{ e.first_name }} {{ e.last_name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Project</mat-label>
+        <mat-select [formField]="taskForm.project_id">
+          <mat-option [value]="null">None</mat-option>
+          @for (p of projects; track p.id) {
+            <mat-option [value]="p.id">{{ p.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (error()) {
+      <p class="text-red-600 text-sm">{{ error() }}</p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close [disabled]="saving()">Cancel</button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="saving() || !taskForm().valid()"
+    >
+      @if (saving()) {
+        <mat-progress-spinner mode="indeterminate" diameter="20" />
+      } @else {
+        {{ isEdit ? 'Save changes' : 'Create task' }}
+      }
+    </button>
+  </mat-dialog-actions>
+</form>

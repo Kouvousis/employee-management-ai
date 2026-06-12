@@ -1,0 +1,84 @@
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-medium">Tasks</h1>
+  @if (isHrOrAdmin()) {
+    <button mat-flat-button color="primary" (click)="add()">
+      <mat-icon>add</mat-icon>
+      New task
+    </button>
+  }
+</div>
+
+<div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" />
+  } @else {
+    <div class="h-1"></div>
+  }
+
+  <div class="overflow-x-auto">
+    <table mat-table [dataSource]="tasks()" class="w-full">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let t" class="font-medium">{{ t.title }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let t">
+          <button
+            type="button"
+            [matMenuTriggerFor]="statusMenu"
+            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+            [class]="statusClass(t.status)"
+            matTooltip="Change status"
+          >
+            {{ statusLabel(t.status) }}
+            <mat-icon class="!text-base !w-4 !h-4 leading-4">arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #statusMenu="matMenu">
+            @for (s of statuses; track s) {
+              <button mat-menu-item (click)="changeStatus(t, s)">{{ statusLabel(s) }}</button>
+            }
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="assignee">
+        <th mat-header-cell *matHeaderCellDef>Assignee</th>
+        <td mat-cell *matCellDef="let t">{{ assigneeName(t) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="project">
+        <th mat-header-cell *matHeaderCellDef>Project</th>
+        <td mat-cell *matCellDef="let t" class="text-gray-600">{{ projectName(t) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="text-right">Actions</th>
+        <td mat-cell *matCellDef="let t" class="text-right whitespace-nowrap">
+          <button mat-icon-button (click)="edit(t)" matTooltip="Edit" aria-label="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="remove(t)" matTooltip="Delete" aria-label="Delete">
+            <mat-icon class="text-red-600">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns()"></tr>
+    </table>
+  </div>
+
+  @if (!loading() && tasks().length === 0) {
+    <div class="p-8 text-center text-gray-500">No tasks found.</div>
+  }
+
+  <mat-paginator
+    [length]="total()"
+    [pageSize]="pageSize()"
+    [pageIndex]="pageIndex()"
+    [pageSizeOptions]="[10, 25, 50]"
+    (page)="onPage($event)"
+  />
+</div>
