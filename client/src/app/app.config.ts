@@ -5,7 +5,8 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { firstValueFrom } from 'rxjs';
 
 import { routes } from './app.routes';
@@ -16,9 +17,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    // If a token is already stored, hydrate the current user before the first
-    // route resolves so role guards have access_rights available.
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideNativeDateAdapter(),
     provideAppInitializer(() => {
       const auth = inject(AuthService);
       if (!auth.token()) return;
