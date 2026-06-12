@@ -5,6 +5,8 @@ from rag.config import LLM
 from rag.tools.company_docs_tool import company_knowledge_tool
 from rag.tools.employee_tool import employee_knowledge_tool
 from rag.tools.employee_query import query_employees, count_employees
+from rag.tools.task_query import query_tasks
+from rag.tools.project_query import query_projects
 from rag.tools.utils import get_current_date
 from rag.tools.employee_actions import add_employee_tool, update_employee_tool, deactivate_employee_tool
 from rag.tools.task_actions import assign_task_tool, add_task_to_project_tool, delete_task_tool
@@ -16,6 +18,8 @@ hr_tools = [
     employee_knowledge_tool,
     query_employees,
     count_employees,
+    query_tasks,
+    query_projects,
     get_current_date,
     add_employee_tool,
     update_employee_tool,
