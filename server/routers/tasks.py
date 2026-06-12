@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 
 from database import get_session
 from models import Task, User
+from rag.sync import sync_single_employee
 from routers.auth import get_current_user, require_hr_or_admin
 from schemas.task import TaskCreate, TaskDelete, TaskPage, TaskRead, TaskStatusUpdate, TaskUpdate, TaskWithEmployee
 
@@ -69,6 +70,9 @@ def create_task(
     session.add(task)
     session.commit()
     session.refresh(task)
+    # Tasks are embedded in the assigned employee's vector document.
+    if task.employee_id is not None:
+        sync_single_employee(task.employee_id)
     return task
 
 
@@ -99,12 +103,17 @@ def update_task(
     else:
         payload = data.model_dump(exclude_none=True)
 
+    old_employee_id = task.employee_id
     for field, value in payload.items():
         setattr(task, field, value)
 
     session.add(task)
     session.commit()
     session.refresh(task)
+    # Re-sync both the previous and current assignee (the task may have been reassigned).
+    for emp_id in {old_employee_id, task.employee_id}:
+        if emp_id is not None:
+            sync_single_employee(emp_id)
     return task
 
 
@@ -132,6 +141,8 @@ def update_task_status(
     session.add(task)
     session.commit()
     session.refresh(task)
+    if task.employee_id is not None:
+        sync_single_employee(task.employee_id)
     return task
 
 
@@ -150,6 +161,10 @@ def delete_task(
     if not task:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
+    employee_id = task.employee_id
     session.delete(task)
     session.commit()
+    # Rebuild the assignee's document so the deleted task drops out of the index.
+    if employee_id is not None:
+        sync_single_employee(employee_id)
     return TaskDelete(id=task_id)
