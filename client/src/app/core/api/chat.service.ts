@@ -59,11 +59,11 @@ export class ChatService {
       buffer = frames.pop() ?? '';
 
       for (const frame of frames) {
-        const line = frame.trim();
-        if (!line.startsWith('data:')) continue;
-        const data = line.slice(5).trim();
-        if (data === '[DONE]') return;
-        yield data;
+        const idx = frame.indexOf('data:');
+        if (idx === -1) continue;
+        const payload = frame.slice(idx + 5).trim();
+        if (payload === '[DONE]') return;
+        yield JSON.parse(payload) as string;
       }
     }
   }
