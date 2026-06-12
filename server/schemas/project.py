@@ -22,6 +22,7 @@ class ProjectRead(BaseModel):
     description: str
     deadline: date
     status: ProjectStatus
+    is_active: bool
 
 
 class ProjectCreate(BaseModel):
@@ -45,3 +46,10 @@ class ProjectDelete(BaseModel):
 
 class ProjectWithTasks(ProjectRead):
     tasks: list[TaskWithEmployee] = []
+
+
+class ProjectPage(BaseModel):
+    items: list[ProjectRead]
+    total: int
+    skip: int
+    limit: int

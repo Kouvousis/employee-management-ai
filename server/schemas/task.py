@@ -53,3 +53,10 @@ class TaskDelete(BaseModel):
 
 class TaskWithEmployee(TaskRead):
     employee: EmployeeRead | None = None
+
+
+class TaskPage(BaseModel):
+    items: list[TaskRead]
+    total: int
+    skip: int
+    limit: int

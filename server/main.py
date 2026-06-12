@@ -6,6 +6,11 @@ from database import create_db_and_tables, engine
 from seed import seed
 from rag.vectorstores.company_store import get_company_store
 from rag.vectorstores.employee_store import get_employee_store
+from routers.auth import router as auth_router
+from routers.employees import router as employees_router
+from routers.projects import router as projects_router
+from routers.tasks import router as tasks_router
+from routers.chat import router as chat_router
 
 
 @asynccontextmanager
@@ -24,10 +29,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="NovaTech Solutions", lifespan=lifespan)
 
+app.include_router(auth_router)
+app.include_router(employees_router)
+app.include_router(projects_router)
+app.include_router(tasks_router)
+app.include_router(chat_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Thread-ID"],
 )
