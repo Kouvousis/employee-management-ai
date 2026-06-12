@@ -1,0 +1,85 @@
+<div class="flex flex-col h-[calc(100vh-64px-3rem)] max-w-3xl mx-auto">
+  <div class="flex items-center justify-between mb-3">
+    <h1 class="text-xl font-medium">Nova Assistant</h1>
+    <button
+      mat-stroked-button
+      (click)="reset()"
+      [disabled]="streaming() || messages().length === 0"
+    >
+      <mat-icon>refresh</mat-icon>
+      New chat
+    </button>
+  </div>
+
+  <div
+    #scrollContainer
+    class="flex-1 overflow-y-auto rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-4"
+  >
+    @if (messages().length === 0) {
+      <div class="h-full flex flex-col items-center justify-center text-center text-gray-500">
+        <mat-icon class="mb-2 scale-150">smart_toy</mat-icon>
+        <p class="text-lg font-medium">How can I help?</p>
+        <p class="text-sm max-w-xs">
+          Ask about company policies, employees, or projects — or request an action like adding an
+          employee or assigning a task.
+        </p>
+      </div>
+    }
+
+    @for (msg of messages(); track $index) {
+      <div class="flex" [class.justify-end]="msg.role === 'user'">
+        <div
+          class="rounded-2xl px-4 py-2 max-w-[80%] break-words"
+          [class]="
+            msg.role === 'user'
+              ? 'bg-cyan-600 text-white'
+              : 'bg-white border border-gray-200 text-gray-900'
+          "
+        >
+          @if (msg.role === 'user') {
+            <span class="whitespace-pre-wrap">{{ msg.content }}</span>
+          } @else {
+            <div class="markdown" [innerHTML]="renderMarkdown(msg.content)"></div>
+            @if (streaming() && $last) {
+              <span
+                class="inline-block w-2 h-4 align-middle bg-gray-400 animate-pulse"
+                aria-hidden="true"
+              ></span>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (error()) {
+    <p class="text-red-600 text-sm mt-2">{{ error() }}</p>
+  }
+
+  <form (ngSubmit)="send()" class="flex items-end gap-2 mt-3">
+    <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="6"
+        name="draft"
+        placeholder="Message Nova…"
+        [ngModel]="draft()"
+        (ngModelChange)="draft.set($event)"
+        (keydown.enter)="onEnter($event)"
+        [disabled]="streaming()"
+      ></textarea>
+    </mat-form-field>
+    <button
+      mat-fab
+      color="primary"
+      type="submit"
+      class="mb-1 shrink-0"
+      [disabled]="streaming() || !draft().trim()"
+      aria-label="Send message"
+    >
+      <mat-icon>send</mat-icon>
+    </button>
+  </form>
+</div>
