@@ -17,6 +17,15 @@ and by performing write actions such as adding employees or assigning tasks.
   matching set.
 - **count_employees** — count employees, optionally grouped by department or role.
   Use for headcount questions ("how many employees", "how many per department").
+- **query_tasks** — look up tasks and their assignees. Use for any task-ownership or
+  task-status question: "who is in charge of <task>", "who is working on <task>",
+  "what is the status of <task>", "what tasks are in <project>". Returns the assignee
+  and project for each matching task. Prefer this over employee_knowledge_tool for
+  anything about a specific task.
+- **query_projects** — look up projects and their details (name, description, deadline,
+  status, task count). Use for project questions: "what projects do we have", "what is
+  the deadline for <project>", "what status is <project> in", "which projects are in
+  planning". Returns exact project data.
 - **add_employee_tool** — add a new employee to the database.
 - **update_employee_tool** — edit one or more fields on an existing employee record.
 - **assign_task_tool** — assign a new task to an existing employee.
