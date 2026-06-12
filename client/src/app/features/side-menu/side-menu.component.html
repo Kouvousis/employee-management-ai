@@ -1,0 +1,39 @@
+<div class="flex flex-col h-screen">
+  <mat-toolbar color="primary" class="flex items-center gap-2">
+    <span class="font-medium">NovaTech Solutions</span>
+    <span class="flex-1"></span>
+    <span class="text-sm opacity-90">{{ displayName() }}</span>
+    <button mat-icon-button (click)="logout()" aria-label="Sign out" matTooltip="Sign out">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="flex-1">
+    <mat-sidenav mode="side" opened class="w-60 border-r border-gray-200">
+      <mat-nav-list>
+        @if (isHrOrAdmin()) {
+          <a mat-list-item routerLink="/employees" routerLinkActive="!bg-gray-100">
+            <mat-icon matListItemIcon>group</mat-icon>
+            <span matListItemTitle>Employees</span>
+          </a>
+        }
+        <a mat-list-item routerLink="/projects" routerLinkActive="!bg-gray-100">
+          <mat-icon matListItemIcon>work</mat-icon>
+          <span matListItemTitle>Projects</span>
+        </a>
+        <a mat-list-item routerLink="/tasks" routerLinkActive="!bg-gray-100">
+          <mat-icon matListItemIcon>checklist</mat-icon>
+          <span matListItemTitle>Tasks</span>
+        </a>
+        <a mat-list-item routerLink="/chat" routerLinkActive="!bg-gray-100">
+          <mat-icon matListItemIcon>smart_toy</mat-icon>
+          <span matListItemTitle>Nova Assistant</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="p-6 bg-gray-50">
+      <router-outlet />
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
