@@ -1,3 +1,4 @@
+import json
 from uuid import uuid4
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
@@ -80,7 +81,7 @@ async def chat_stream(request: ChatRequest, current_user: User = Depends(get_cur
             if event["event"] == "on_chat_model_stream":
                 chunk = event["data"]["chunk"]
                 if isinstance(chunk.content, str) and chunk.content:
-                    yield f"data: {chunk.content}\n\n"
+                    yield f"data: {json.dumps(chunk.content)}\n\n"
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(
